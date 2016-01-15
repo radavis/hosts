@@ -1,0 +1,41 @@
+#!/bin/bash
+
+url="http://winhelp2002.mvps.org/hosts.txt"
+hosts="/private/etc/hosts"
+
+usage() {
+  echo "USAGE: $ ./hosts --[update|restore]"
+}
+
+backup_hosts() {
+  if [ -e $hosts.bak ]; then
+    echo "$hosts.bak already exists"
+  else
+    echo "backing up $hosts to $hosts.bak"
+    cp $hosts $hosts.bak
+    chmod 0444 $hosts.bak
+  fi
+}
+
+restore_hosts() {
+  echo "restoring $hosts"
+  cp $hosts.bak $hosts
+  chmod 0644 $hosts
+}
+
+update_hosts() {
+  backup_hosts
+  echo "updating $hosts from $url"
+  curl $url >> $hosts
+  dscacheutil -flushcache
+}
+
+if [ -z "$1" ]; then
+  usage
+elif [ "$1" == "--update" ]; then
+  update_hosts
+elif [ "$1" == "--restore" ]; then
+  restore_hosts
+else
+  usage
+fi

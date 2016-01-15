@@ -19,7 +19,7 @@ backup_hosts() {
 
 restore_hosts() {
   echo "restoring $hosts"
-  cp $hosts.bak $hosts
+  mv $hosts.bak $hosts
   chmod 0644 $hosts
 }
 
@@ -27,7 +27,6 @@ update_hosts() {
   backup_hosts
   echo "updating $hosts from $url"
   curl $url >> $hosts
-  dscacheutil -flushcache
 }
 
 if [ -z "$1" ]; then
@@ -39,3 +38,5 @@ elif [ "$1" == "--restore" ]; then
 else
   usage
 fi
+
+dscacheutil -flushcache

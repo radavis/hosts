@@ -1,0 +1,11 @@
+{
+  "name": "hosts",
+  "description": "A script to manage your hosts file.",
+  "scripts": {
+    "start": "./hosts"
+  },
+  "dependencies": {
+    "bash": "4.4.0"
+  },
+  "license": "MIT"
+}
